@@ -1,0 +1,3 @@
+#arch64-none-linux-gnu-gcc -print-sysroot -v >> cross-compile.txt 2>&1
+file /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment2/finder-app/writer > file-result.txt 2>&1
+/home/hengjt/Downloads/arm-gnu-toolchain-13.3.rel1-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-gcc -print-sysroot -v  > cross-compile.txt 2>&1
