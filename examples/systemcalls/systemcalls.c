@@ -1,6 +1,8 @@
 #include "systemcalls.h"
 #include <stdlib.h>
+#include <stdio.h>
 #include <unistd.h>
+#include <fcntl.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 /**
@@ -45,9 +47,8 @@ bool do_system(const char *cmd)
  *   or false() if it returned a failure
 */
     int retCode = system(cmd);
-    if (retCode)
-      return false;
-    return true;
+    
+    return (retCode==0?true:false);
 }
 
 /**
@@ -74,7 +75,8 @@ bool do_exec(int count, ...)
     {
         command[i] = va_arg(args, char *);
     }
-    command[count] = NULL;
+    //null terminate the va_arg
+    command[count] = (char *)NULL;
     // this line is to avoid a compile warning before your implementation is complete
     // and may be removed
     command[count] = command[count];
@@ -100,19 +102,29 @@ bool do_exec(int count, ...)
     pid_t pid = fork();
     if(pid<0){
       perror("fork fail");//in fork
-      exit(1);
+      return false;
     }
     if (pid==0) { //child after fork
       //perform execv ,,execv will replace its current process
-      status = execv(command[0],&command[1]);
+      //use execl ,which requires PATH as an environment path passed in
+      //char *const envp[1]={NULL};
+      //char * exec_param = (char *)&command[1];
+      //status = execve(command[0],command,NULL);
+      status = execv(command[0],command);
+      perror("execv failed");
       exit(status);
+      //return false;
     }
     if (pid>0) { //parent after fork
       //wait for child to return and check for status
       pid = waitpid(pid,&status,0);
-      if (status>0){
-        exit(status);//execv failed
+      //printf("pid=%d\n",pid);
+      if (WIFEXITED(status)) {
+        int exit_status = WEXITSTATUS(status);
+        //printf("exit_status=%d\n",exit_status);
+        return exit_status==0?true:false;//execv failed
       }
+      return false;//execv failed
     }
     return true;
 }
@@ -124,6 +136,9 @@ bool do_exec(int count, ...)
 */
 bool do_exec_redirect(const char *outputfile, int count, ...)
 {
+
+    //sanity check
+    //printf("outputfile=%s\n",outputfile);
     va_list args;
     va_start(args, count);
     char * command[count+1];
@@ -133,11 +148,12 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
         command[i] = va_arg(args, char *);
     }
     //insert > redirect command into file utputfile
-    sprintf(command[count]," > %s " ,outputfile);
-    command[count+1] = NULL;
+    //sprintf(command[count]," > %s " ,outputfile);
+    //null terminate the va_arg
+    command[count] = NULL;
     // this line is to avoid a compile warning before your implementation is complete
     // and may be removed
-    command[count+1] = command[count];
+    command[count] = command[count];
 
 
 /*
@@ -149,25 +165,56 @@ bool do_exec_redirect(const char *outputfile, int count, ...)
 */
 
     va_end(args);
+    
+    //open file 
+    int fd;
+    
+    
     int status;
     //flush to avoid double print
     fflush(stdout);
     pid_t pid = fork();
     if(pid<0){
-      perror("fork fail");//in fork
-      exit(1);
+      //perror("fork fail");//in fork
+      return false;
     }
     if (pid==0) { //child after fork
       //perform execv ,,execv will replace its current process
-      status = execv(command[0],&command[1]);
-      exit(status);
+      //use execl ,which requires PATH as an environment path passed in
+      //char *const envp[1]={NULL};
+      //char * exec_param = (char *)&command[1];
+      
+      fd = open(outputfile, O_CREAT|O_TRUNC|O_WRONLY, 0666);
+      //redirect stdout to file
+      dup2(fd, 1); 
+      //redirect stderr to file
+      //dup2(fd, STDERR_FILENO);
+      close(fd);
+
+      //status = execve(command[0],command,NULL);
+      status = execv(command[0],command);
+      perror("execv failed");
+      return false;
     }
     if (pid>0) { //parent after fork
       //wait for child to return and check for status
       pid = waitpid(pid,&status,0);
-      if (status>0){
-        exit(status);//execv failed
+      
+      //redirect file to stdio
+      fd = open(outputfile, O_WRONLY, 0666);
+      dup2(1,fd); 
+      close(fd);
+      //redirect stderr to file
+      //dup2(STDERR_FILENO,fd);
+      
+      //printf("pid=%d\n",pid);
+      if (WIFEXITED(status)) {
+        int exit_status = WEXITSTATUS(status);
+        //printf("exit_status=%d\n",exit_status);
+        return exit_status==0?true:false;//execv failed
       }
+      return false;//execv failed
+      
     }
     return true;
 }
