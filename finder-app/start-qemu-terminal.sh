@@ -25,8 +25,15 @@ fi
 
 
 echo "Booting the kernel"
+#Ctrl + A + X to exit qemu
 # See trick at https://superuser.com/a/1412150 to route serial port output to file
 qemu-system-aarch64 -m 256M -M virt -cpu cortex-a53 -nographic -smp 1 -kernel ${KERNEL_IMAGE} \
         -chardev stdio,id=char0,mux=on,logfile=${OUTDIR}/serial.log,signal=off \
-        -serial chardev:char0 -mon chardev=char0\
+        -serial chardev:char0 -mon chardev=char0 \
         -append "rdinit=/bin/sh" -initrd ${INITRD_IMAGE}
+        #exit prompt
+        #then Ctrl + A +X to quit qemu
+        #STATIC LINKING -- note that we cannot have # in between, must be continuous, relies on \ to extend the linke
+        #-append "rdinit=/bin/busybox sh" -initrd ${INITRD_IMAGE}
+	#DYNAMIC LINKING
+	
