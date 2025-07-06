@@ -59,71 +59,13 @@ void* threadfunc(void* thread_param)
     int rc;
     //rc = pthread_mutex_trylock(mutex);
     rc = pthread_mutex_lock(mutex);
-    /*
-     EBUSY
-
-    The mutex could not be acquired because the mutex pointed to by mutex was already locked.
-
-
-EAGAIN
-
-    The mutex could not be acquired because the maximum number of recursive locks for mutex has been exceeded.
-
-If the symbol _POSIX_THREAD_PRIO_INHERIT is defined, the mutex is initialized with the protocol attribute value PTHREAD_PRIO_INHERIT, and the robustness argument of pthread_mutexattr_setrobust_np() is PTHREAD_MUTEX_ROBUST_NP the function fails and returns:
-
-
-EOWNERDEAD
-
-    The last owner of this mutex died while holding the mutex. This mutex is now owned by the caller. The caller must attempt to make the state protected by the mutex consistent.
-
-    If the caller is able to make the state consistent, call pthread_mutex_consistent_np() for the mutex and unlock the mutex. Subsequent calls to pthread_mutex_lock() will behave normally.
-
-    If the caller is unable to make the state consistent, do not call pthread_mutex_init() for the mutex, but unlock the mutex. Subsequent calls to pthread_mutex_trylock() fail to acquire the mutex and return an ENOTRECOVERABLE error code.
-
-    If the owner that acquired the lock with EOWNERDEAD dies, the next owner acquires the lock with EOWNERDEAD.
-
-
-ENOTRECOVERABLE
-
-    The mutex you are trying to acquire is protecting state left irrecoverable by the mutex's previous owner that died while holding the lock. The mutex has not been acquired. This condition can occur when the lock was previously acquired with EOWNERDEAD and the owner was unable to cleanup the state and had unlocked the mutex without making the mutex state consistent.
-
-ENOMEM
-
-    The limit on the number of simultaneously held mutexes has been exceeded.
-
-    */
-    /*
-      pthread_mutexattr_t Attr;
-
-      pthread_mutexattr_init(&Attr);
-      pthread_mutexattr_settype(&Attr, PTHREAD_MUTEX_RECURSIVE);
-      pthread_mutex_init(mutex,&Attr);
-      rc = pthread_mutex_trylock(mutex);*/
-    //rc = pthread_mutex_lock(mutex);
+    
     printf("mutext trylock rc=%d\n",rc);
-    /*
-    if (rc == EINVAL) { //invalid mutex, not initialized
-      printf("rc == EINVAL\n");
-      //create re-entry mutex
-      //pthread_mutex_t Mutex;
-      
-      thread_func_args->thread_complete_success = false;
-      pthread_exit(thread_func_args); 
-      //return thread_param;
-    }*/
+    
     if (rc == 0 ) {
       //do nothing
     }
-    //The mutex could not be acquired because it was already locked.
-    /*
-    if (rc == EBUSY) {
-      printf("rc == EBUSY\n");
-      //blocking , return true
-      thread_func_args->thread_complete_success = true;
-      //pthread_exit(thread_func_args); 
-      return thread_func_args;  
-      
-    }*/
+    
    
     if (rc < 0 ) {
       thread_func_args->thread_complete_success = false;
