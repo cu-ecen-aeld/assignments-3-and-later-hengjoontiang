@@ -60,7 +60,7 @@ do
         cp "$WRITEDIR/${username}$i.txt"  /tmp/assignment4-result.txt
 done
 
-OUTPUTSTRING=$(./finder.sh "$WRITEDIR" "$WRITESTR")
+OUTPUTSTRING=$(finder.sh "$WRITEDIR" "$WRITESTR")
 
 # remove temporary directories
 rm -rf /tmp/aeld-data
