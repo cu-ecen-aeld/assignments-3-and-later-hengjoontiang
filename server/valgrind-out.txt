@@ -1,0 +1,311 @@
+==8950== Memcheck, a memory error detector
+==8950== Copyright (C) 2002-2022, and GNU GPL'd, by Julian Seward et al.
+==8950== Using Valgrind-3.22.0-bd4db67b1d-20231031 and LibVEX; rerun with -h for copyright info
+==8950== Command: ./aesdsocket
+==8950== Parent PID: 8948
+==8950== 
+--8950-- 
+--8950-- Valgrind options:
+--8950--    --error-exitcode=1
+--8950--    --leak-check=full
+--8950--    --show-leak-kinds=all
+--8950--    --track-origins=yes
+--8950--    --errors-for-leak-kinds=definite
+--8950--    --verbose
+--8950--    --log-file=valgrind-out.txt
+--8950-- Contents of /proc/version:
+--8950--   Linux version 6.8.0-64-generic (buildd@lcy02-amd64-083) (x86_64-linux-gnu-gcc-13 (Ubuntu 13.3.0-6ubuntu2~24.04) 13.3.0, GNU ld (GNU Binutils for Ubuntu) 2.42) #67-Ubuntu SMP PREEMPT_DYNAMIC Sun Jun 15 20:23:31 UTC 2025
+--8950-- 
+--8950-- Arch and hwcaps: AMD64, LittleEndian, amd64-cx16-lzcnt-rdtscp-sse3-ssse3-avx-avx2-bmi-f16c-rdrand-rdseed
+--8950-- Page sizes: currently 4096, max supported 4096
+--8950-- Valgrind library directory: /usr/libexec/valgrind
+--8950-- Reading syms from /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket
+--8950-- Reading syms from /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+--8950--   Considering /usr/lib/debug/.build-id/28/1ac1521b4102509b1c7ac7004db7c1efb81796.debug ..
+--8950--   .. build-id is valid
+--8950-- Reading syms from /usr/libexec/valgrind/memcheck-amd64-linux
+--8950--    object doesn't have a dynamic symbol table
+--8950-- Scheduler: using generic scheduler lock implementation.
+--8950-- Reading suppressions file: /usr/libexec/valgrind/default.supp
+==8950== embedded gdbserver: reading from /tmp/vgdb-pipe-from-vgdb-to-8950-by-hengjt-on-???
+==8950== embedded gdbserver: writing to   /tmp/vgdb-pipe-to-vgdb-from-8950-by-hengjt-on-???
+==8950== embedded gdbserver: shared mem   /tmp/vgdb-pipe-shared-mem-vgdb-8950-by-hengjt-on-???
+==8950== 
+==8950== TO CONTROL THIS PROCESS USING vgdb (which you probably
+==8950== don't want to do, unless you know exactly what you're doing,
+==8950== or are doing some strange experiment):
+==8950==   /usr/bin/vgdb --pid=8950 ...command...
+==8950== 
+==8950== TO DEBUG THIS PROCESS USING GDB: start GDB like this
+==8950==   /path/to/gdb ./aesdsocket
+==8950== and then give GDB the following command
+==8950==   target remote | /usr/bin/vgdb --pid=8950
+==8950== --pid is optional if only one valgrind process is running
+==8950== 
+--8950-- REDIR: 0x4028b00 (ld-linux-x86-64.so.2:strlen) redirected to 0x580c2e1a (???)
+--8950-- REDIR: 0x40272b0 (ld-linux-x86-64.so.2:index) redirected to 0x580c2e34 (???)
+--8950-- Reading syms from /usr/libexec/valgrind/vgpreload_core-amd64-linux.so
+--8950-- Reading syms from /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so
+==8950== WARNING: new redirection conflicts with existing -- ignoring it
+--8950--     old: 0x04028b00 (strlen              ) R-> (0000.0) 0x580c2e1a ???
+--8950--     new: 0x04028b00 (strlen              ) R-> (2007.0) 0x0484f340 strlen
+--8950-- REDIR: 0x40274e0 (ld-linux-x86-64.so.2:strcmp) redirected to 0x4850460 (strcmp)
+--8950-- REDIR: 0x4026910 (ld-linux-x86-64.so.2:mempcpy) redirected to 0x4853cd0 (mempcpy)
+--8950-- Reading syms from /usr/lib/x86_64-linux-gnu/libc.so.6
+--8950--   Considering /usr/lib/debug/.build-id/28/2c2c16e7b6600b0b22ea0c99010d2795752b5f.debug ..
+--8950--   .. build-id is valid
+--8950-- REDIR: 0x4028ca0 (ld-linux-x86-64.so.2:strncmp) redirected to 0x484fc90 (strncmp)
+--8950-- REDIR: 0x492d050 (libc.so.6:strnlen) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492d0e0 (libc.so.6:strpbrk) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492b1a0 (libc.so.6:strcmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x49443b0 (libc.so.6:wcsnlen) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492a290 (libc.so.6:memset) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x4943b20 (libc.so.6:wcslen) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x49af3c0 (libc.so.6:__memcpy_chk) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492a200 (libc.so.6:memrchr) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x4944350 (libc.so.6:wcsncpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x4929720 (libc.so.6:memcpy@@GLIBC_2.14) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x49428e0 (libc.so.6:wcschr) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492b090 (libc.so.6:index) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492d110 (libc.so.6:rindex) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x4942990 (libc.so.6:wcscmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492a4b0 (libc.so.6:stpncpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x4950eb0 (libc.so.6:wmemchr) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492cef0 (libc.so.6:strncmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492a510 (libc.so.6:strcasecmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492c310 (libc.so.6:strcspn) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x49438f0 (libc.so.6:wcscpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492b020 (libc.so.6:strcat) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492cdf0 (libc.so.6:strncasecmp_l) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492b110 (libc.so.6:strchrnul) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x4929630 (libc.so.6:bcmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492c2a0 (libc.so.6:strcpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492a5b0 (libc.so.6:strcasecmp_l) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492ccc0 (libc.so.6:strlen) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492cf90 (libc.so.6:strncpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x4950f30 (libc.so.6:wmemcmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x49af4e0 (libc.so.6:__memmove_chk) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+==8950== WARNING: new redirection conflicts with existing -- ignoring it
+--8950--     old: 0x04a009d0 (__memcpy_chk_avx_una) R-> (2030.0) 0x04853dd0 __memcpy_chk
+--8950--     new: 0x04a009d0 (__memcpy_chk_avx_una) R-> (2024.0) 0x04853740 __memmove_chk
+--8950-- REDIR: 0x492a440 (libc.so.6:stpcpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x4929fc0 (libc.so.6:memmove) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+==8950== Preferring higher priority redirection:
+--8950--     old: 0x04a00a00 (__memcpy_avx_unalign) R-> (2018.0) 0x04851580 __memcpy_avx_unaligned_erms
+--8950--     new: 0x04a00a00 (__memcpy_avx_unalign) R-> (2018.1) 0x04852d60 memmove
+--8950-- REDIR: 0x49295b0 (libc.so.6:memchr) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492d2e0 (libc.so.6:strspn) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492a0e0 (libc.so.6:mempcpy) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x492cd50 (libc.so.6:strncasecmp) redirected to 0x483d1c0 (_vgnU_ifunc_wrapper)
+--8950-- REDIR: 0x4a055f0 (libc.so.6:__strrchr_avx2) redirected to 0x484ed20 (rindex)
+--8950-- REDIR: 0x4925650 (libc.so.6:malloc) redirected to 0x48467b0 (malloc)
+--8950-- REDIR: 0x4a02b60 (libc.so.6:__strchr_avx2) redirected to 0x484ef00 (index)
+--8950-- REDIR: 0x4925d30 (libc.so.6:free) redirected to 0x4849820 (free)
+--8950-- REDIR: 0x4a01400 (libc.so.6:__memset_avx2_unaligned_erms) redirected to 0x4852c50 (memset)
+--8950-- REDIR: 0x4a02da0 (libc.so.6:__strchrnul_avx2) redirected to 0x48537b0 (strchrnul)
+--8950-- REDIR: 0x4a00a00 (libc.so.6:__memcpy_avx_unaligned_erms) redirected to 0x4852d60 (memmove)
+--8950-- REDIR: 0x4a034f0 (libc.so.6:__strcpy_avx2) redirected to 0x484f370 (strcpy)
+--8950-- REDIR: 0x4a03740 (libc.so.6:__strlen_avx2) redirected to 0x484f220 (strlen)
+--8950-- REDIR: 0x4a04820 (libc.so.6:__strncmp_avx2) redirected to 0x484fab0 (strncmp)
+--8950-- REDIR: 0x4a009d0 (libc.so.6:__memcpy_chk_avx_unaligned_erms) redirected to 0x4853dd0 (__memcpy_chk)
+--8950-- REDIR: 0x4a002a0 (libc.so.6:__memcmp_avx2_movbe) redirected to 0x4852480 (bcmp)
+--8950-- REDIR: 0x4a02f90 (libc.so.6:__strcmp_avx2) redirected to 0x4850360 (strcmp)
+==8958== Conditional jump or move depends on uninitialised value(s)
+==8958==    at 0x109EB0: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8958==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8958==  Uninitialised value was created by a stack allocation
+==8958==    at 0x1098E8: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8958== 
+==8958== 
+==8958== HEAP SUMMARY:
+==8958==     in use at exit: 10 bytes in 1 blocks
+==8958==   total heap usage: 18 allocs, 17 frees, 14,594 bytes allocated
+==8958== 
+==8958== Searching for pointers to 1 not-freed blocks
+==8958== Checked 109,752 bytes
+==8958== 
+==8958== 10 bytes in 1 blocks are still reachable in loss record 1 of 1
+==8958==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8958==    by 0x1097F3: read_file (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8958==    by 0x109F20: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8958==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8958== 
+==8958== LEAK SUMMARY:
+==8958==    definitely lost: 0 bytes in 0 blocks
+==8958==    indirectly lost: 0 bytes in 0 blocks
+==8958==      possibly lost: 0 bytes in 0 blocks
+==8958==    still reachable: 10 bytes in 1 blocks
+==8958==         suppressed: 0 bytes in 0 blocks
+==8958== 
+==8958== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==8958== 
+==8958== 1 errors in context 1 of 1:
+==8958== Conditional jump or move depends on uninitialised value(s)
+==8958==    at 0x109EB0: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8958==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8958==  Uninitialised value was created by a stack allocation
+==8958==    at 0x1098E8: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8958== 
+==8958== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==8968== Conditional jump or move depends on uninitialised value(s)
+==8968==    at 0x109EB0: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8968==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8968==  Uninitialised value was created by a stack allocation
+==8968==    at 0x1098E8: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8968== 
+==8968== 
+==8968== HEAP SUMMARY:
+==8968==     in use at exit: 18 bytes in 1 blocks
+==8968==   total heap usage: 18 allocs, 17 frees, 14,602 bytes allocated
+==8968== 
+==8968== Searching for pointers to 1 not-freed blocks
+==8968== Checked 109,760 bytes
+==8968== 
+==8968== 18 bytes in 1 blocks are still reachable in loss record 1 of 1
+==8968==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8968==    by 0x1097F3: read_file (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8968==    by 0x109F20: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8968==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8968== 
+==8968== LEAK SUMMARY:
+==8968==    definitely lost: 0 bytes in 0 blocks
+==8968==    indirectly lost: 0 bytes in 0 blocks
+==8968==      possibly lost: 0 bytes in 0 blocks
+==8968==    still reachable: 18 bytes in 1 blocks
+==8968==         suppressed: 0 bytes in 0 blocks
+==8968== 
+==8968== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==8968== 
+==8968== 1 errors in context 1 of 1:
+==8968== Conditional jump or move depends on uninitialised value(s)
+==8968==    at 0x109EB0: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8968==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8968==  Uninitialised value was created by a stack allocation
+==8968==    at 0x1098E8: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8968== 
+==8968== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==8978== Conditional jump or move depends on uninitialised value(s)
+==8978==    at 0x109EB0: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8978==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8978==  Uninitialised value was created by a stack allocation
+==8978==    at 0x1098E8: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8978== 
+==8978== 
+==8978== HEAP SUMMARY:
+==8978==     in use at exit: 29 bytes in 1 blocks
+==8978==   total heap usage: 18 allocs, 17 frees, 14,613 bytes allocated
+==8978== 
+==8978== Searching for pointers to 1 not-freed blocks
+==8978== Checked 109,768 bytes
+==8978== 
+==8978== 29 bytes in 1 blocks are still reachable in loss record 1 of 1
+==8978==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8978==    by 0x1097F3: read_file (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8978==    by 0x109F20: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8978==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8978== 
+==8978== LEAK SUMMARY:
+==8978==    definitely lost: 0 bytes in 0 blocks
+==8978==    indirectly lost: 0 bytes in 0 blocks
+==8978==      possibly lost: 0 bytes in 0 blocks
+==8978==    still reachable: 29 bytes in 1 blocks
+==8978==         suppressed: 0 bytes in 0 blocks
+==8978== 
+==8978== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==8978== 
+==8978== 1 errors in context 1 of 1:
+==8978== Conditional jump or move depends on uninitialised value(s)
+==8978==    at 0x109EB0: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8978==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8978==  Uninitialised value was created by a stack allocation
+==8978==    at 0x1098E8: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8978== 
+==8978== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==8988== Conditional jump or move depends on uninitialised value(s)
+==8988==    at 0x109EB0: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8988==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8988==  Uninitialised value was created by a stack allocation
+==8988==    at 0x1098E8: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8988== 
+==8988== 
+==8988== HEAP SUMMARY:
+==8988==     in use at exit: 40 bytes in 1 blocks
+==8988==   total heap usage: 18 allocs, 17 frees, 14,624 bytes allocated
+==8988== 
+==8988== Searching for pointers to 1 not-freed blocks
+==8988== Checked 109,784 bytes
+==8988== 
+==8988== 40 bytes in 1 blocks are still reachable in loss record 1 of 1
+==8988==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8988==    by 0x1097F3: read_file (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8988==    by 0x109F20: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8988==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8988== 
+==8988== LEAK SUMMARY:
+==8988==    definitely lost: 0 bytes in 0 blocks
+==8988==    indirectly lost: 0 bytes in 0 blocks
+==8988==      possibly lost: 0 bytes in 0 blocks
+==8988==    still reachable: 40 bytes in 1 blocks
+==8988==         suppressed: 0 bytes in 0 blocks
+==8988== 
+==8988== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==8988== 
+==8988== 1 errors in context 1 of 1:
+==8988== Conditional jump or move depends on uninitialised value(s)
+==8988==    at 0x109EB0: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8988==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8988==  Uninitialised value was created by a stack allocation
+==8988==    at 0x1098E8: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8988== 
+==8988== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==8999== Conditional jump or move depends on uninitialised value(s)
+==8999==    at 0x109EB0: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8999==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8999==  Uninitialised value was created by a stack allocation
+==8999==    at 0x1098E8: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8999== 
+--8999-- REDIR: 0x4a009c0 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x48538d0 (mempcpy)
+==8999== 
+==8999== HEAP SUMMARY:
+==8999==     in use at exit: 20,039 bytes in 1 blocks
+==8999==   total heap usage: 18 allocs, 17 frees, 34,623 bytes allocated
+==8999== 
+==8999== Searching for pointers to 1 not-freed blocks
+==8999== Checked 149,232 bytes
+==8999== 
+==8999== 20,039 bytes in 1 blocks are still reachable in loss record 1 of 1
+==8999==    at 0x4846828: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==8999==    by 0x1097F3: read_file (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8999==    by 0x109F20: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8999==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8999== 
+==8999== LEAK SUMMARY:
+==8999==    definitely lost: 0 bytes in 0 blocks
+==8999==    indirectly lost: 0 bytes in 0 blocks
+==8999==      possibly lost: 0 bytes in 0 blocks
+==8999==    still reachable: 20,039 bytes in 1 blocks
+==8999==         suppressed: 0 bytes in 0 blocks
+==8999== 
+==8999== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+==8999== 
+==8999== 1 errors in context 1 of 1:
+==8999== Conditional jump or move depends on uninitialised value(s)
+==8999==    at 0x109EB0: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8999==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8999==  Uninitialised value was created by a stack allocation
+==8999==    at 0x1098E8: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8999== 
+==8999== ERROR SUMMARY: 1 errors from 1 contexts (suppressed: 0 from 0)
+--8950-- REDIR: 0x4a009c0 (libc.so.6:__mempcpy_avx_unaligned_erms) redirected to 0x48538d0 (mempcpy)
+==8950== Warning: invalid file descriptor -1 in syscall close()
+==8950==    at 0x498E6F4: close (close.c:27)
+==8950==    by 0x10A04C: aesd_main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8950==    by 0x10A1EC: main (in /home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-1/server/aesdsocket)
+==8950== 
+==8950== HEAP SUMMARY:
+==8950==     in use at exit: 0 bytes in 0 blocks
+==8950==   total heap usage: 14 allocs, 14 frees, 9,544 bytes allocated
+==8950== 
+==8950== All heap blocks were freed -- no leaks are possible
+==8950== 
+==8950== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
