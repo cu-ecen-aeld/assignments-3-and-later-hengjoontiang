@@ -1,0 +1,17 @@
+# etc/init.d/S99 script [start|stop|restart]
+PATH=/home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-2/server
+#check passed in option
+#!/bin/sh
+
+DAEMON="${PATH}/aesdsocket"
+DAEMON_ARGS=" -d"
+
+case "$1" in 
+	start)
+		echo "starting daemon aesdsocket"
+		/usr/sbin/start-stop-daemon --start --exec "${DAEMON}" -- "${DAEMON_ARGS}"
+	;;
+esac
+
+exit 0
+		
