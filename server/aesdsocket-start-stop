@@ -1,5 +1,5 @@
 # etc/init.d/S99 script [start|stop|restart]
-PATH=/home/hengjt/Desktop/Training/Coursera/LinuxSystemProgrammingandIntroductiontoBuildroot/Assignment5/assignment-5-part-2/server
+PATH=/usr/bin
 #check passed in option
 #!/bin/sh
 
