@@ -1,17 +1,18 @@
+#!/bin/sh
 # etc/init.d/S99 script [start|stop|restart]
 DAEMON_PATH=/usr/bin
 START_STOP_DAEMON_PATH=/usr/sbin
 #check passed in option
-#!/bin/sh
+
 
 DAEMON=${DAEMON_PATH}/aesdsocket
-DAEMON_ARGS=" -d"
+DAEMON_ARGS="-d"
 
 case "$1" in 
 	start)
 		echo "starting daemon aesdsocket"
-		echo /usr/sbin/start-stop-daemon --start --exec "${DAEMON}" -- "${DAEMON_ARGS}"
-		${START_STOP_DAEMON_PATH}/start-stop-daemon --start --exec "${DAEMON}" -- "${DAEMON_ARGS}"
+		echo "${START_STOP_DAEMON_PATH}/start-stop-daemon --start --exec ${DAEMON} -- ${DAEMON_ARGS}"
+		${START_STOP_DAEMON_PATH}/start-stop-daemon --start --exec ${DAEMON} -- ${DAEMON_ARGS}
 	;;
 esac
 
