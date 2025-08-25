@@ -42,15 +42,23 @@ Opens a stream socket bound to port 9000, failing and returning -1 if any of the
 #include <arpa/inet.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <signal.h>
 #include <syslog.h>
 #include <fcntl.h>
+#include <time.h>
+#include <pthread.h>
+#include "ThreadSafeArrayList.h"
+#include "threading.h"
 
 #define PORT "9000"  // the port users will be connecting to
 #define AESD_DATA_FILE "/var/tmp/aesdsocketdata"
 #define BACKLOG 10   // how many pending connections queue will hold
 volatile sig_atomic_t stop_flag = 0;
+pthread_mutex_t aesd_file_mutex;
 
+volatile sig_atomic_t IsMsgComplete = 0;
+ThreadSafeArrayList threadsafearraylist;
 // get sockaddr, IPv4 or IPv6:
 void *get_in_addr(struct sockaddr *sa)
 {
@@ -60,6 +68,7 @@ void *get_in_addr(struct sockaddr *sa)
 
     return &(((struct sockaddr_in6*)sa)->sin6_addr);
 }
+
 void init_file(char * filename){
           FILE *fptr;//for client data store
           fptr = fopen(filename,"w");
@@ -73,23 +82,35 @@ void init_file(char * filename){
           fptr = NULL; 
 }
 void write_file(char * stream_buffer, int numchar_to_write, char * filename){
+
+          //check mutex
+          pthread_mutex_lock(&aesd_file_mutex);
+          
           FILE *fptr;//for client data store
           fptr = fopen(filename,"a+");
           stream_buffer[numchar_to_write] = '\0';
           fprintf(fptr, "%s", stream_buffer);
+          
           //printf("write_file raw_bytes\n");
-          /*for (int u=0;u<strlen(stream_buffer);u++){
-            printf("%d\n",stream_buffer[u]);
-          }*/
+          //for (int u=0;u<strlen(stream_buffer);u++){
+          //  printf("%d\n",stream_buffer[u]);
+          //}
           //fputs(stream_buffer,fptr);
           //fflush(fptr);
           fclose(fptr);
           fptr = NULL; 
+          
+          //let go of mutex
+          pthread_mutex_unlock(&aesd_file_mutex);
 }
 char * read_file(ssize_t* numbytes, char * filename) {
             char* stream_buffer;
             FILE *fptr;//for client data store
             //ssize_t numbytes;
+            
+            
+            pthread_mutex_lock(&aesd_file_mutex);
+            
             fptr = fopen(filename,"r");
             if(fptr == NULL){
                 perror("Missing file to send back to client");
@@ -127,6 +148,8 @@ char * read_file(ssize_t* numbytes, char * filename) {
             fclose(fptr);
             //fptr = NULL; 
             
+            pthread_mutex_unlock(&aesd_file_mutex);
+            
             return stream_buffer;
 }
 //to handle SIGINT and SIGTERM
@@ -138,7 +161,76 @@ void sigint_handler(int signum) {
             //printf("stop_flag=%d\n",stop_flag);
         }
 }
+void timer_handler (int signum){
+  printf("Timer expired!\n");
+  /* Append a timestamp in the form “timestamp:time” where time is specified by the RFC 2822 compliant strftime format
+, followed by newline.*/ 
+  //"Tue, 01 Jun 2024 14:30:00 -0700"
+  
+  time_t t = time(NULL);
+  struct tm tm = *localtime(&t);
+  // 2025-08-17 19:26:01
+  //01234567890123456789
+  char buffer[50];
+  sprintf(buffer,"timestamp: %d-%02d-%02d %02d:%02d:%02d\n", tm.tm_year + 1900, tm.tm_mon + 1, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec);
+  printf("%s\n",buffer);
+  
+  write_file(buffer, sizeof(buffer),AESD_DATA_FILE);
+}
 //read file contents into a buffer
+void* threadfunc(void* thread_param)
+{
+
+    // TODO: wait, obtain mutex, wait, release mutex as described by thread_data structure
+    // hint: use a cast like the one below to obtain thread arguments from your parameter
+    struct thread_data* thread_func_args = NULL;
+    
+    
+   
+    int clientfd;
+    
+    if (thread_param){
+      thread_func_args = (struct thread_data *) thread_param;
+      thread_func_args->currentThread = pthread_self(); 
+      clientfd = thread_func_args->clientfd;
+    }
+    printf("In threadfunc\n");
+    
+    //do thread stuff
+    //do read from socket
+    
+    //check if rec \n
+    //need to pass in clientfd
+    char buffer[10000]; //use a fixed size buffer for receiving
+    ssize_t bytes_received = recv(clientfd,buffer,1024,0);//fixed max size 1024 so that it does not hang
+    
+    
+    //add_element(&threadsafearraylist,buffer);
+    
+    if (buffer[bytes_received-1]=='\n')
+        IsMsgComplete = 1;
+    if (bytes_received <= 0 ) 
+        IsMsgComplete = 1;
+    if (bytes_received > 0 ) {
+    //transfer to linkedlist
+      printf("buffer=%s\n",buffer);
+      char *bytes_rec_buffer=malloc(bytes_received);
+      strcpy(bytes_rec_buffer,buffer);
+      add_element(&threadsafearraylist, bytes_rec_buffer);
+    }
+   
+    
+    thread_func_args->thread_complete_success = true;
+    
+    
+    
+    
+    printf("thread success \n");
+    //dun stop the thread
+    //pthread_exit(thread_func_args); 
+    return thread_func_args;
+}
+
 
 int aesd_main(void)
 {
@@ -157,6 +249,32 @@ int aesd_main(void)
         perror("Error setting SIGTERM handler");
         exit(1);
     }
+    if (signal(SIGALRM, timer_handler) == SIG_ERR) { // Install signal handler
+        perror("Error setting SIGALRM handler");
+        exit(1);
+    }
+    //alarm(10); // Schedule SIGALRM in 5 seconds
+    
+    
+    struct itimerval new_value;
+    memset(&new_value, 0, sizeof(new_value));
+
+    new_value.it_interval.tv_sec = 10;   
+    new_value.it_interval.tv_usec = 0;
+    new_value.it_value.tv_sec = 10;
+    new_value.it_value.tv_usec = 0;
+
+    int ret = setitimer(ITIMER_REAL, &new_value, NULL);
+    if (ret != 0)
+    {
+         perror("setitimer");
+         exit(1);
+    }
+    
+    
+    init_array_list(&threadsafearraylist, 10000);
+    
+    pthread_mutex_init(&aesd_file_mutex, NULL); // Initialize the mutex
     
     FILE *fptr;//for client data store
     
@@ -294,7 +412,11 @@ int aesd_main(void)
             //int receiver_len=-1;
             int total_received = 0;
             
-            while ( !stop_flag) {
+            
+            IsMsgComplete = 0;
+            pthread_t thread_array[100];
+            int pthread_count = 0;//reset threadcount
+            while ( !stop_flag) { //this while loop will continue to create new threads to rec till we have recieved end of line,which will break out of loop
               //printf("rec loop stop_flag=%d\n",stop_flag);
               //if (stop_flag) break; //to handle SIGINT/SIGTERM
               //non blocking read till client has stopped sending
@@ -334,20 +456,14 @@ int aesd_main(void)
                 //recv(clientfd,&received_len, sizeof(int),0);
                 //printf("received_len=%d\n",received_len);
                 
-                ssize_t bytes_received = recv(clientfd,buffer+total_received,1024,0);//fixed max size 1024 so that it does not hang
-                //printf("bytes_received=%d\n",(int)bytes_received);
-                //check the raw bytes received
-                /*
-                for (int u=0;u<(int)bytes_received;u++){
-                    printf("%d\n",buffer[u]);
-                }*/
-                if (buffer[total_received-1]=='\n'){
-                  //buffer[total_received]='\0';
-                  break;
-                }
-                if (bytes_received <= 0 )  break;
-                //total_received += (bytes_received+1);//null terminate the string
-                total_received += (bytes_received);
+                //ssize_t bytes_received = recv(clientfd,buffer+total_received,1024,0);//fixed max size 1024 so that it does not hang
+                
+                
+                //bool retStatus = false;
+                struct thread_data* thread_func_args = malloc(sizeof(struct thread_data));
+                thread_func_args->clientfd = clientfd;
+                int rc = pthread_create(&thread_array[pthread_count], NULL, threadfunc, thread_func_args);
+                pthread_count++; 
                 
               }
               /*
@@ -357,7 +473,44 @@ int aesd_main(void)
                 break;
               }*/
               
+               if (IsMsgComplete==1) 
+                  break;
+              
             }//while ( !stop_flag) {
+            
+            //join threads 
+            void * thread_rtn = NULL;
+            for (int local_thread_count = 0; local_thread_count < pthread_count;local_thread_count++) {
+              int rc = pthread_join(thread_array[local_thread_count],&thread_rtn);
+              if( thread_rtn ) {
+                struct thread_data* thread_func_data = (struct thread_data *) thread_rtn;
+                free(thread_rtn);
+              }//if( thread_rtn ) {
+            }//for (int local_thread_count
+            
+            
+            //reconstruct the buffer from the threadsafearraylist
+            int list_size = threadsafearraylist.size;
+            for (int array_index = 0 ; array_index < list_size; array_index++) {
+              //copy from threadsafearraylist to the buffers");
+              
+              //int mini_buffer_size=sizeof(threadsafearraylist.elements[array_index])/sizeof(threadsafearraylist.elements[array_index][0]);
+              int mini_buffer_size=strlen(threadsafearraylist.elements[array_index]);
+              /*
+              printf("mini_buffer_size=%d\n",mini_buffer_size);
+              char *mini_buffer=malloc(mini_buffer_size);
+              strcpy(mini_buffer,(char*)threadsafearraylist.elements[array_index]);
+              printf("min_buffer=%s\n",mini_buffer);
+              printf("threadsafearraylist.elements[%d]=%s\n",array_index,mini_buffer);
+              strcat(buffer,mini_buffer);
+              */
+              strcat(buffer,(char*)threadsafearraylist.elements[array_index]);
+              total_received+=mini_buffer_size;
+            }
+            
+            printf("check buffer=%s\n",buffer);
+            printf("total_received=%d\n",total_received);
+            
             //send(clientfd, "abcd", 4, 0);
             //buffer[total_received]='\0';//snull terminate for string
             //printf("adjusted length of string with null terminator =%d\n",total_received);
@@ -437,7 +590,10 @@ int aesd_main(void)
     remove(AESD_DATA_FILE);
     close(clientfd); 
     close(sockfd); 
-    
+    alarm(0);
+    // Destroy the mutex
+    pthread_mutex_destroy(&aesd_file_mutex);
+    destroy_array_list(&threadsafearraylist);
     closelog();
     return 0;
 }
