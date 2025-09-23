@@ -11,8 +11,10 @@ DAEMON_ARGS="-d"
 case "$1" in 
 	start)
 		echo "starting daemon aesdsocket"
-		echo "${START_STOP_DAEMON_PATH}/start-stop-daemon --start --exec ${DAEMON} -- ${DAEMON_ARGS}"
-		${START_STOP_DAEMON_PATH}/start-stop-daemon --start --exec ${DAEMON} -- ${DAEMON_ARGS}
+		#echo "${START_STOP_DAEMON_PATH}/start-stop-daemon --start --exec ${DAEMON} -- ${DAEMON_ARGS}"
+        echo "start-stop-daemon --start --exec ${DAEMON} -- ${DAEMON_ARGS}"
+		#${START_STOP_DAEMON_PATH}/start-stop-daemon --start --exec ${DAEMON} -- ${DAEMON_ARGS}
+        start-stop-daemon --start --exec ${DAEMON} -- ${DAEMON_ARGS}
 	;;
 esac
 
