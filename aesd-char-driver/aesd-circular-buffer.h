@@ -11,12 +11,15 @@
 #ifdef __KERNEL__
 #include <linux/types.h>
 #else
-#include <stddef.h> // size_t
-#include <stdint.h> // uintx_t
-#include <stdbool.h>
+//#include <stddef.h> // size_t
+//#include <stdint.h> // uintx_t
+//#include <stdbool.h>
 #endif
 
+
+//temporarily set to 3 for a quick testing
 #define AESDCHAR_MAX_WRITE_OPERATIONS_SUPPORTED 10
+
 
 struct aesd_buffer_entry
 {
@@ -40,15 +43,16 @@ struct aesd_circular_buffer
      * The current location in the entry structure where the next write should
      * be stored.
      */
-    uint8_t in_offs;
+    uint8_t in_offs;//head
     /**
      * The first location in the entry structure to read from
      */
-    uint8_t out_offs;
+    uint8_t out_offs;//tail
     /**
      * set to true when the buffer entry structure is full
      */
     bool full;
+    uint8_t count;
 };
 
 extern struct aesd_buffer_entry *aesd_circular_buffer_find_entry_offset_for_fpos(struct aesd_circular_buffer *buffer,
@@ -57,6 +61,10 @@ extern struct aesd_buffer_entry *aesd_circular_buffer_find_entry_offset_for_fpos
 extern void aesd_circular_buffer_add_entry(struct aesd_circular_buffer *buffer, const struct aesd_buffer_entry *add_entry);
 
 extern void aesd_circular_buffer_init(struct aesd_circular_buffer *buffer);
+
+extern void sanity_check(struct aesd_circular_buffer *cir_buffer); 
+
+extern int getTotalSizeFromFIFO(struct aesd_circular_buffer *cir_buffer);
 
 /**
  * Create a for loop to iterate over each member of the circular buffer.

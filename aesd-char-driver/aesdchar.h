@@ -23,13 +23,40 @@
 #  define PDEBUG(fmt, args...) /* not debugging: nothing */
 #endif
 
+#include "aesd-circular-buffer.h"
+#include <linux/module.h>
+#include <linux/kernel.h>
+#include <linux/device.h>
+//#include <linux/spinlock.h>
 struct aesd_dev
 {
     /**
      * TODO: Add structure(s) and locks needed to complete assignment requirements
      */
-    struct cdev cdev;     /* Char device structure      */
+        
+    
+    
+        //struct list_head list;
+	dev_t dev; //device id of a specific device instance !!
+	
+	struct cdev cdev;     /* Char device structure  */
+	//struct aesd_circular_buffer *circular_buffer; //custom circular buffer -- no direct access, within the device driver, effectively at user space, we interact with user data only
+	//size_t	esize;
+	//spinlock_t my_lock;
+	//struct mutex fifo_lock;         // Shields queue modifications
+	
+	/* Access Control Flags */
+        //atomic_t reader_available;     // Tracking reader slots 
+        //atomic_t writer_available;     // Tracking writer slots
+    
+	/* Blocking queues for empty/full thresholds */
+        //wait_queue_head_t read_queue;
+        //wait_queue_head_t write_queue;
+        
+        struct class *my_class;
+        struct device *my_device;
 };
+
 
 
 #endif /* AESD_CHAR_DRIVER_AESDCHAR_H_ */
